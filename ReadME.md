@@ -60,3 +60,33 @@ serve -s build -l 4000
 Now you should be able to access the Netflix clone application by opening your web browser and navigating to `http://localhost:4000`.
 
 Enjoy exploring the Netflix clone!
+
+
+# About this project
+By default this project comes only with plain code (Frontend, Backend, and DB). No CI/CD, Docker, Helm, Kubernetes and other Devops related Tools, Just for testing In development. In this case I have Integrated Devops stack to make this better project 
+
+The tools I have implemented Including:
+## Package this app using Docker
+about my Dockerfile
+```Dockerfile
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+RUN groupadd -r worker && useradd -r -g worker worker
+    
+COPY package*.json ./app
+RUN npm install
+COPY . .
+
+EXPOSE 4000 
+USER worker
+
+FROM gcr.io/distroless/nodejs24-debian12
+WORKDIR /app
+COPY --from=builder /app/src/app.js .
+COPY --from=builder /app/node_module ./app
+CMD ["index.js"]
+```
+
+During package the App I used Devsecops approach where I create a Docker file from scratch with security best practice, Start with Choose a slim node Image at the first Stage, Generate a USER for the app, Implement Multi Stage and Use Distroless Image to reduce the Image size and attack surface. 
