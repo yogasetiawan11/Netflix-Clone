@@ -8,10 +8,10 @@ COPY package*.json ./app
 RUN npm install
 COPY . .
 
-EXPOSE 4000 
+EXPOSE 3000 
 USER worker
 
-FROM gcr.io/distroless/nodejs24-debian12
+FROM node:18-slim
 WORKDIR /app
 COPY --from=builder /app/src/app.js .
 COPY --from=builder /app/node_module ./app
