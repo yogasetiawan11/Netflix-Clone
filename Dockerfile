@@ -2,7 +2,8 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-RUN groupadd -r worker && useradd -r -g worker worker
+RUN groupadd -r worker && useradd -r -g worker worker \
+    && chown -R worker:worker /app
     
 COPY package*.json ./app
 RUN npm install
